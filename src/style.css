@@ -115,6 +115,6 @@ aside.emoji-picker-react button {
   display: none;
 }
 
-div::-webkit-scrollbar-corner {
+.scroll::-webkit-scrollbar-corner {
   background-color: transparent;
 }
