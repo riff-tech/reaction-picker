@@ -1,10 +1,9 @@
 .emoji-picker-react div.skin-tones-list {
   padding: 0;
-  margin: 0;
+  margin-left: 4px;
+  margin-top: 4px;
   list-style-type: none;
   position: absolute;
-  top: 13px;
-  right: 40px;
 }
 
 .emoji-picker-react div.skin-tones-list button {

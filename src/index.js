@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import CategoriesNav from './components/CategoriesNav';
 import EmojiList from './components/EmojiList';
+import GifBrowser from './components/GifBrowser';
 import RecentlyUsed from './components/RecentlyUsed';
 import Search from './components/Search';
 import VariationsMenu from './components/VariationsMenu';
@@ -15,9 +16,10 @@ import {
   PickerContextProvider,
   useCloseVariationMenu,
   useCollapseSkinTones,
+  useConfig,
+  useSkinToneSpreadValue,
 } from './PickerContext';
-
-import {
+import SkinTones, {
   SKIN_TONE_DARK,
   SKIN_TONE_LIGHT,
   SKIN_TONE_MEDIUM,
@@ -31,6 +33,8 @@ import './style.css';
 const EmojiPicker = ({
   emojiUrl = DEFAULT_EMOJI_URL,
   onEmojiClick,
+  onGifClick,
+  giphyAPIKey,
   preload = false,
   native = false,
   skinTone = SKIN_TONE_NEUTRAL,
@@ -60,6 +64,8 @@ const EmojiPicker = ({
       }}
       recentlyUsed={getRecentlyUsed()}
       onEmojiClick={clickHandler(onClickRef)}
+      onGifClick={onGifClick}
+      giphyAPIKey={giphyAPIKey}
     >
       <EmojiPickerContent {...props} />
     </PickerContextProvider>
@@ -72,6 +78,9 @@ const EmojiPickerContent = ({ pickerStyle = {}, searchPlaceholder = null }) => {
   const emojiSearchRef = useRef(null);
   const skinToneSpreadRef = useRef(null);
   const categoriesNavRef = useRef(null);
+
+  const config = useConfig();
+  const tonePickerOpen = useSkinToneSpreadValue();
 
   useKeyboardNavigation({
     categoriesNavRef,
@@ -86,22 +95,45 @@ const EmojiPickerContent = ({ pickerStyle = {}, searchPlaceholder = null }) => {
       emojiPickerAsideRef={emojiPickerRef}
       skinToneSpreadRef={skinToneSpreadRef}
     >
-      <CategoriesNav
-        emojiListRef={emojiListRef}
-        categoriesNavRef={categoriesNavRef}
-      />
       <Search
         searchPlaceholder={searchPlaceholder}
         emojiSearchRef={emojiSearchRef}
-        skinToneSpreadRef={skinToneSpreadRef}
       />
 
-      <div className="content-wrapper-epr">
-        <VariationsMenu />
-        <section className="emoji-scroll-wrapper" ref={emojiListRef}>
-          <RecentlyUsed emojiListRef={emojiListRef} />
-          <EmojiList emojiListRef={emojiListRef} />
-        </section>
+      <div className="dualview">
+        <div className="emoji-block">
+          <div className="outer-scroll-wrapper">
+            <CategoriesNav
+              emojiListRef={emojiListRef}
+              categoriesNavRef={categoriesNavRef}
+            />
+            <div className="content-wrapper-epr">
+              <VariationsMenu />
+              <section
+                className="scroll emoji-scroll-wrapper"
+                ref={emojiListRef}
+              >
+                <RecentlyUsed emojiListRef={emojiListRef} />
+                <EmojiList emojiListRef={emojiListRef} />
+              </section>
+            </div>
+          </div>
+          {config.disableSkinTonePicker ? null : (
+            <div className="emoji-footer">
+              <span
+                className={
+                  tonePickerOpen ? 'footer-label-hidden' : 'footer-label'
+                }
+              >
+                Skin tone
+              </span>
+              <div className="skintone-wrapper">
+                <SkinTones skinToneSpreadRef={skinToneSpreadRef} />
+              </div>
+            </div>
+          )}
+        </div>
+        <GifBrowser chooseGif={() => {}} />
       </div>
     </Aside>
   );
@@ -166,6 +198,8 @@ export default EmojiPicker;
 
 EmojiPicker.propTypes = {
   onEmojiClick: PropTypes.func,
+  onGifClick: PropTypes.func,
+  giphyAPIKey: PropTypes.string,
   pickerStyle: PropTypes.objectOf(PropTypes.string),
   ...customEmojiPropTypes,
   ...configPropTypes,

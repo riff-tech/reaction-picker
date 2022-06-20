@@ -124,7 +124,10 @@ const CategoriesNav = ({ emojiListRef, categoriesNavRef, customGroups }) => {
         <div
           className="active-category-indicator"
           style={{
-            transform: `translateX(${Math.max(left + index / 2, left)}px)`,
+            transform: `translateX(${Math.max(
+              left + index / 2 - index,
+              left
+            )}px)`,
             opacity: barOpacity,
             ...(inactive && {
               display: 'none',

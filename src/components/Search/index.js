@@ -3,15 +3,10 @@ import React from 'react';
 
 import useFilter from '../../hooks/useFilter';
 import { useConfig } from '../../PickerContext';
-import SkinTones from '../SkinTones';
 
 import './style.css';
 
-function Search({
-  searchPlaceholder = null,
-  emojiSearchRef,
-  skinToneSpreadRef,
-}) {
+function Search({ searchPlaceholder = null, emojiSearchRef }) {
   const config = useConfig();
   const onChange = useFilter();
 
@@ -21,6 +16,7 @@ function Search({
 
   return (
     <div style={{ position: 'relative' }}>
+      <div className="search-icon" />
       <input
         placeholder={searchPlaceholder}
         className="emoji-search"
@@ -28,9 +24,6 @@ function Search({
         autoFocus={!config.disableAutoFocus}
         ref={emojiSearchRef}
       />
-      {config.disableSkinTonePicker ? null : (
-        <SkinTones skinToneSpreadRef={skinToneSpreadRef} />
-      )}
     </div>
   );
 }
@@ -40,9 +33,6 @@ export default Search;
 Search.propTypes = {
   searchPlaceholder: PropTypes.string,
   emojiSearchRef: PropTypes.shape({
-    current: PropTypes.instanceOf(Element),
-  }),
-  skinToneSpreadRef: PropTypes.shape({
     current: PropTypes.instanceOf(Element),
   }),
 };

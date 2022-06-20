@@ -11,6 +11,8 @@ export function PickerContextProvider({
   config,
   recentlyUsed,
   onEmojiClick,
+  onGifClick,
+  giphyAPIKey,
 }) {
   const activeCategoryState = useState(null);
   const filterState = useState([]);
@@ -35,6 +37,8 @@ export function PickerContextProvider({
         config,
         recentlyUsed,
         onEmojiClick,
+        onGifClick,
+        giphyAPIKey,
       }}
     >
       {children}
@@ -197,9 +201,19 @@ export function useOnEmojiClick() {
   return useContext(PickerContext).onEmojiClick;
 }
 
+export function useOnGifClick() {
+  return useContext(PickerContext).onGifClick;
+}
+
+export function useGiphyAPIKey() {
+  return useContext(PickerContext).giphyAPIKey;
+}
+
 PickerContextProvider.propTypes = {
   children: PropTypes.node,
   config: configPropsShape,
   recentlyUsed: PropTypes.arrayOf(PropTypes.object),
   onEmojiClick: PropTypes.func,
+  onGifClick: PropTypes.func,
+  giphyAPIKey: PropTypes.string,
 };

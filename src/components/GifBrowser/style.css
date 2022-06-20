@@ -1,0 +1,9 @@
+.gif-scroll-wrapper {
+  width: 340px;
+  height: 346px;
+  overflow-y: scroll;
+}
+
+.giphy-gif {
+  cursor: pointer;
+}
