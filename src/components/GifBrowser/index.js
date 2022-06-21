@@ -30,7 +30,7 @@ const GifBrowser = () => {
     <div className="gif-scroll-wrapper scroll">
       <Grid
         onGifClick={gif => {
-          onGifClick(gif.images.downsized.url);
+          onGifClick(gif.images.downsized.url || gif.images.original.url);
         }}
         hideAttribution
         noLink
